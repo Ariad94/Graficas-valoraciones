@@ -36,14 +36,14 @@ Nivel.Requerido <- c(rep(30,55), rep(30,55),rep(30,55))
 
 datos <- data.frame(Nombre.Modulos, Puntuaciones.Modulos, Nivel.Requerido)
 
-datos %>% ggplot(aes(Puntuaciones.Modulos)) + 
- scale_x_continuous(limit=c(0,100), breaks = c(0,10,20,30,40,50,60,70,80,90,100)) +
- geom_histogram( fill = Nombre.Modulos, bins = 10, alpha = 0.25, color = "black") + 
- stat_bin(bins = 10, geom="text", aes(label=..count..), vjust = -0.5) +
+datos %>% ggplot(aes(Puntuaciones.Modulos,fill = Nombre.Modulos)) + 
+ scale_x_continuous(limit=c(0,40), breaks = c(0,5,10,15,20,25,30,35,40)) +
+ geom_histogram(bins = 8,  alpha = 0.25, color = "black") + 
+ stat_bin(bins = 8, geom="text", aes(label=..count..), vjust = -0.3) +
  geom_vline(aes(xintercept=Nivel.Requerido), col = "dodgerblue4", alpha = 0.7, size = 1, linetype = "longdash") +  
  facet_grid(Nombre.Modulos~.) +
  labs(title="Competencias, conocimientos y funciones ", subtitle="Número de empleados por intervalos de puntuaciones",
  x = "Puntuaciones", y = "Número de empleados") +
  theme_pander() + theme(plot.title = element_text( color = "dodgerblue4", size=15, hjust=0),
  plot.subtitle = element_text( color = "dodgerblue4", size=12, hjust=0),
- strip.text.y = element_text(color = "dodgerblue4", size=10), legend.position="none")
+ strip.text.y = element_text(color = "dodgerblue4", size=12), legend.position="none")
