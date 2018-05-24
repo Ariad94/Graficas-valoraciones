@@ -24,13 +24,13 @@ datos  %>% ggplot(aes(Puntuaciones, fill = Etiquetas)) + scale_x_continuous(limi
 mean <- mean(programadores$FINAL)
 sd <- sd(programadores$FINAL)
 
-programadores  %>% ggplot(aes(FINAL)) + scale_x_continuous(limit=c(0,100), breaks = c(0,10,20,30,40,50,60,70,80,90,100)) + 
+programadores  %>% ggplot(aes(FINAL)) + scale_x_continuous(limit=c(0,100), breaks = seq(0,100, by = 5)) + 
  geom_histogram(aes(y = ..count..), bins=20, color = "black", fill = "darkviolet", alpha=0.7) + stat_bin(bins = 20, geom="text", aes(label=..count..), vjust = -0.6) +
  stat_function(fun = function(x) dnorm(x, mean = mean, sd = sd)*400,
  color = "darkred", size = 1)+ 
  xlab("Puntuaciones finales")+ylab("Número de empleados")+ labs(title ="Puntuaciones finales", subtitle= 
- "Número de empleados por intervalo de puntuaciones") + theme_pander() + theme(plot.title = element_text( color = "dodgerblue4", size=15, hjust=0),
- plot.subtitle = element_text( color = "dodgerblue4", size=10, hjust=0)) 
+ "Número de empleados por intervalo de puntuaciones") + theme_pander() + theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0),
+ plot.subtitle = element_text( color = "dodgerblue4", size=20, hjust=0)) 
 
 ### ### Histograma de frecuencias con linea en el valor requerido
 
