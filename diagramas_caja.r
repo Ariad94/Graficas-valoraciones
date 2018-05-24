@@ -4,6 +4,15 @@ library(ggplot2)
 library(ggthemes)
 library(dplyr)
 
+### ### Diagrama de cajas de una variable 
+#Para FINAL
+
+programadores %>% mutate(Etiquetas = rep("FINAL",55)) %>% ggplot(aes(Etiquetas, FINAL)) + geom_boxplot(fill = "darkviolet", alpha = 0.8) +
+ labs(title="Puntuaciones Finales", subtitle = "Cuartiles, máximo, mínimo y rango intercuartílico", x = "", y = "") +
+ theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0),
+ plot.subtitle = element_text( color = "dodgerblue4", size=20, hjust=0)) 
+
+
 ### ### Diagrama de cajas de una variable por factores
 # Para UN, UT
 
@@ -37,21 +46,21 @@ programadores %>% mutate(Nombre.Valorador = reorder(Nombre.Valorador, FINAL, FUN
  theme(axis.text.x = element_text(angle = 90, hjust = 1)) 
 
 ### ### Diagrama de cajas de variables variables en el mismo grafico
-# Para FINAL, Modulo 1, Modulo 2 y Modulo 3
+# Modulo 1, Modulo 2 y Modulo 3
 
-Etiquetas <- c(rep("Final",55), rep("Competencias",55), rep("Conocimientos",55), rep("Funciones",55))
-Puntuaciones <- c(programadores$FINAL, programadores$M1, programadores$M2, programadores$M3)
+Etiquetas <- c(rep("Competencias",55), rep("Conocimientos",55), rep("Funciones",55))
+Puntuaciones <- c(programadores$M1, programadores$M2, programadores$M3)
 
 datos <- data.frame(Etiquetas, Puntuaciones)
 
 opuesto <-  function(x){return(-median(x))}
 
 datos %>% mutate(Etiquetas = reorder(Etiquetas, Puntuaciones, FUN = opuesto)) %>%
- ggplot(aes(Etiquetas, Puntuaciones)) + geom_boxplot(fill = c("darkviolet","palegreen","sandybrown", "paleturquoise1")) +
+ ggplot(aes(Etiquetas, Puntuaciones)) + geom_boxplot(fill = c("palegreen","sandybrown", "paleturquoise1")) +
  labs(title="Puntuaciones Finales, Competencias, Conocimientos y Funciones", subtitle="Cuartiles, máximo, mínimo y rango intercuartílico", 
  x = "", y = "") +
- theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=15, hjust=0), 
- plot.subtitle = element_text( color = "dodgerblue4", size=12, hjust=0)) 
+ theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0), 
+ plot.subtitle = element_text( color = "dodgerblue4", size=20, hjust=0)) 
 
 
 
