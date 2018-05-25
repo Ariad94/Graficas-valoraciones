@@ -12,11 +12,11 @@ Puntuaciones <- c(programadores$M1, programadores$M2, programadores$M3)
 
 datos <- data.frame(Etiquetas, Puntuaciones)
 
-datos  %>% ggplot(aes(Puntuaciones, fill = Etiquetas)) + scale_x_continuous(limit=c(0,50)) + geom_histogram(bins=10, color = "black") + 
+datos  %>% ggplot(aes(Puntuaciones, fill = Etiquetas)) + scale_x_continuous(limit=c(0,110),breaks = seq(0,100, by = 10)) + geom_histogram(bins=11, color = "black") + 
  xlab("Puntuaciones")+ylab("Número de empleados")+ labs(title ="Competencias, conocimientos y funciones", subtitle= 
  "Número de empleados por intervalo de puntuaciones") +
- scale_fill_discrete(name = "Módulo") + theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=15, hjust=0),
- plot.subtitle = element_text( color = "dodgerblue4", size=10, hjust=0))
+ scale_fill_discrete(name = "Módulo") + theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0),
+ plot.subtitle = element_text( color = "dodgerblue4", size=20, hjust=0))
 
 
 ### ### Histograma de frecuencias con curva normal
@@ -41,22 +41,56 @@ programadores  %>% ggplot(aes(FINAL)) + scale_x_continuous(limit=c(0,100), break
  "Número de empleados por intervalo de puntuaciones") + theme_pander() + theme(plot.title = element_text( color = "dodgerblue4", size=15, hjust=0),
  plot.subtitle = element_text( color = "dodgerblue4", size=10, hjust=0)) 
 
-### ### Histograma de frecuencias facet_grid
+### ### Histograma de frecuencias facet_grid y curva normal
 
 Nombre.Modulos <- c(rep("Competencias", 55), rep("Conocimientos", 55), rep("Funciones", 55))
 Puntuaciones.Modulos <- c(programadores$M1,programadores$M2,programadores$M3)
-Nivel.Requerido <- c(rep(30,55), rep(30,55),rep(30,55))
 
-datos <- data.frame(Nombre.Modulos, Puntuaciones.Modulos, Nivel.Requerido)
+datos <- data.frame(Nombre.Modulos, Puntuaciones.Modulos)
 
-datos %>% ggplot(aes(Puntuaciones.Modulos,fill = Nombre.Modulos)) + 
- scale_x_continuous(limit=c(0,40), breaks = c(0,5,10,15,20,25,30,35,40)) +
- geom_histogram(bins = 8,  alpha = 0.25, color = "black") + 
- stat_bin(bins = 8, geom="text", aes(label=..count..), vjust = -0.3) +
- geom_vline(aes(xintercept=Nivel.Requerido), col = "dodgerblue4", alpha = 0.7, size = 1, linetype = "longdash") +  
+stats <- aggregate(Puntuaciones.Modulos~Nombre.Modulos, datos, function(x) c(mean=mean(x), sd=sd(x)))
+stats <- data.frame(Nombre.Modulos=stats[,1],stats[,2])
+
+x <- seq(0,110, by = 0.1)
+datos_normal <- do.call(rbind,lapply(1:nrow(stats), 
+                            function(i) with(stats[i,],data.frame(Nombre.Modulos, x, y=dnorm(x,mean=mean,sd=sd)))))
+
+
+datos %>% ggplot(aes(Puntuaciones.Modulos)) + 
+ scale_x_continuous(limit=c(0,110), breaks = seq(0,100, by = 10)) + 
+ geom_histogram(aes(y = ..density.., fill = Nombre.Modulos), bins=10, color = "black", alpha=0.7) + 
+ stat_bin(bins = 10, geom="text", aes(y = ..density..,label=..count..), vjust = -0.1) +
+ stat_density(geom="line", color = "darkblue", size = 0.7)+
+ geom_line(data=datos_normal, aes(x, y),color = "darkred", size = 0.7)+
  facet_grid(Nombre.Modulos~.) +
  labs(title="Competencias, conocimientos y funciones ", subtitle="Número de empleados por intervalos de puntuaciones",
- x = "Puntuaciones", y = "Número de empleados") +
- theme_pander() + theme(plot.title = element_text( color = "dodgerblue4", size=15, hjust=0),
- plot.subtitle = element_text( color = "dodgerblue4", size=12, hjust=0),
- strip.text.y = element_text(color = "dodgerblue4", size=12), legend.position="none")
+ x = "Puntuaciones", y = "Densidad de empleados") +
+ theme_pander() + theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0),
+ plot.subtitle = element_text( color = "dodgerblue4", size=20, hjust=0),
+ strip.text.y = element_text(color = "dodgerblue4", size=15), legend.position = "none")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
