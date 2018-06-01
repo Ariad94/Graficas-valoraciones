@@ -16,9 +16,44 @@ programadores %>% mutate(Etiquetas = rep("FINAL",55)) %>% ggplot(aes(Etiquetas, 
 ### ### Diagrama de cajas de una variable por factores
 # Para UN, UT
 
-programadores %>% ggplot(aes(UN, FINAL)) + geom_boxplot(fill = c("yellowgreen","sandybrown")) +
+programadores %>% ggplot(aes(UT, FINAL)) + geom_boxplot(aes(fill = UT)) +
  xlab("")+ylab("")+ggtitle("Puntuaciones Finales: \nCuartiles, máximo, mínimo y rango intercuartílico") +
  theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=15, hjust=0)) 
+
+
+### ### Diagrama de cajas de una variable por factores + facet_grid
+# UT
+
+Etiquetas <- c(rep("Puntuaciones finales",55), rep("Competencias", 55), rep("Conocimientos",55), rep("Desempeño",55))
+Puntuaciones<- c(programadores$FINAL, programadores$M1, programadores$M2, programadores$M3)
+Grupo <- rep(programadores$UT, 4)
+
+datos <- data.frame(Etiquetas, Grupo, Puntuaciones)
+
+datos %>% mutate(Grupo = reorder(Grupo, Puntuaciones, FUN = median))%>%
+ ggplot() + geom_boxplot(aes(Grupo, Puntuaciones, fill = Etiquetas)) +
+ xlab("")+ylab("")+ labs(title = "Cuartiles, máximo, mínimo y rango intercuartílico") +
+ facet_grid(Etiquetas~.) +
+ theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0),
+ strip.text.y = element_text(color = "dodgerblue4", size=15), legend.position="none")
+
+### ### Diagrama de cajas de una variable por factores + facet_grid
+# UN
+
+Etiquetas <- c(rep("Puntuaciones finales",55), rep("Competencias", 55), rep("Conocimientos",55), rep("Desempeño",55))
+Puntuaciones<- c(programadores$FINAL, programadores$M1, programadores$M2, programadores$M3)
+Grupo <- rep(programadores$UN, 4)
+
+datos <- data.frame(Etiquetas, Grupo, Puntuaciones)
+
+datos %>% mutate(Grupo = reorder(Grupo, Puntuaciones, FUN = median))%>%
+ ggplot() + geom_boxplot(aes(Grupo, Puntuaciones, fill = Etiquetas)) +
+ xlab("")+ylab("")+ labs(title = "Cuartiles, máximo, mínimo y rango intercuartílico") +
+ facet_grid(Etiquetas~.) +
+ theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0),
+ strip.text.y = element_text(color = "dodgerblue4", size=15), legend.position="none")
+
+
 
 ### ### Diagrama de cajas de una variable por factores y por colores
 # Para empleado-valorador, valorador-aprobador
@@ -57,13 +92,59 @@ opuesto <-  function(x){return(-median(x))}
 
 datos %>% mutate(Etiquetas = reorder(Etiquetas, Puntuaciones, FUN = opuesto)) %>%
  ggplot(aes(Etiquetas, Puntuaciones)) + geom_boxplot(fill = c("palegreen","sandybrown", "paleturquoise1")) +
- labs(title="Puntuaciones Finales, Competencias, Conocimientos y Funciones", subtitle="Cuartiles, máximo, mínimo y rango intercuartílico", 
+ labs(title="Puntuaciones de los módulos de competencias, conocimientos y funciones", subtitle="Cuartiles, máximo, mínimo y rango intercuartílico", 
  x = "", y = "") +
  theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0), 
  plot.subtitle = element_text( color = "dodgerblue4", size=20, hjust=0)) 
 
+# Competencias
+
+Etiquetas <- c(rep("Calidad y mejora continua",55), rep("Pensamiento analítico",55), rep("Capacidad de aprendizaje",55),
+ rep("Solución de problemas ",55), rep("Competencia digital",55))
+Puntuaciones <- c(programadores$C1II, programadores$C2II, programadores$C3II, programadores$C4II, programadores$C5II)
+
+datos <- data.frame(Etiquetas, Puntuaciones)
 
 
+datos %>% mutate(Etiquetas = reorder(Etiquetas, Puntuaciones, FUN = median)) %>%
+ ggplot(aes(Etiquetas, Puntuaciones)) + geom_boxplot(aes(fill = Etiquetas)) +
+ labs(title="Puntuaciones por competencias", subtitle="Cuartiles, máximo, mínimo y rango intercuartílico", 
+ x = "", y = "") +
+ theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0), 
+ plot.subtitle = element_text( color = "dodgerblue4", size=20, hjust=0), legend.position = "none") 
+
+
+# Conocimientos
+
+Etiquetas <- c(rep("Lenguajes de programación",55), rep("Herramientas de desarrollo (id)",55))
+Puntuaciones <- c(programadores$CN1, programadores$CN2)
+
+datos <- data.frame(Etiquetas, Puntuaciones)
+
+
+datos %>% mutate(Etiquetas = reorder(Etiquetas, Puntuaciones, FUN = median)) %>%
+ ggplot(aes(Etiquetas, Puntuaciones)) + geom_boxplot(aes(fill = Etiquetas)) +
+ labs(title="Puntuaciones por conocimientos", subtitle="Cuartiles, máximo, mínimo y rango intercuartílico", 
+ x = "", y = "") +
+ theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0), 
+ plot.subtitle = element_text( color = "dodgerblue4", size=20, hjust=0), legend.position = "none") 
+
+
+# Funciones
+
+Etiquetas <- c(rep("Programar aplicaciones",55), rep("Manejar bases de datos",55), rep("Asesorar a los usuarios",55), rep("Documentar los módulos",55),
+ rep("Aplicar las normas",55))
+Puntuaciones <- c(programadores$F1, programadores$F2, programadores$F3, programadores$F4, programadores$F5)
+
+datos <- data.frame(Etiquetas, Puntuaciones)
+
+
+datos %>% mutate(Etiquetas = reorder(Etiquetas, Puntuaciones, FUN = median)) %>%
+ ggplot(aes(Etiquetas, Puntuaciones)) + geom_boxplot(aes(fill = Etiquetas)) +
+ labs(title="Puntuaciones por funciones", subtitle="Cuartiles, máximo, mínimo y rango intercuartílico", 
+ x = "", y = "") +
+ theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0), 
+ plot.subtitle = element_text( color = "dodgerblue4", size=20, hjust=0), legend.position = "none") 
 
 
 
