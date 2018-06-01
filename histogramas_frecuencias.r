@@ -6,16 +6,65 @@ library(ggthemes)
 
 
 ### ### Histograma de frecuencias apiladas
+#Modulos
 
 Etiquetas <- c(rep("Competencias",55), rep("Conocimientos",55),rep("Funciones",55))
 Puntuaciones <- c(programadores$M1, programadores$M2, programadores$M3)
 
+opuesto <-  function(x){return(-median(x))}
+
 datos <- data.frame(Etiquetas, Puntuaciones)
 
-datos  %>% ggplot(aes(Puntuaciones, fill = Etiquetas)) + scale_x_continuous(limit=c(0,110),breaks = seq(0,100, by = 10)) + geom_histogram(bins=11, color = "black") + 
+datos  %>% mutate(Etiquetas = reorder(Etiquetas, Puntuaciones, FUN = opuesto)) %>% 
+ ggplot(aes(Puntuaciones, fill = Etiquetas)) + scale_x_continuous(limit=c(0,100),breaks = seq(0,100, by = 10)) + geom_histogram(bins=10, color = "black") + 
  xlab("Puntuaciones")+ylab("Número de empleados")+ labs(title ="Competencias, conocimientos y funciones", subtitle= 
  "Número de empleados por intervalo de puntuaciones") +
  scale_fill_discrete(name = "Módulo") + theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0),
+ plot.subtitle = element_text( color = "dodgerblue4", size=20, hjust=0))
+
+#Competencias
+
+Etiquetas <- c(rep("Calidad y mejora continua",55), rep("Pensamiento analítico",55), rep("Capacidad de aprendizaje",55),
+ rep("Solución de problemas ",55), rep("Competencia digital",55))
+Puntuaciones <- c(programadores$C1II, programadores$C2II, programadores$C3II, programadores$C4II, programadores$C5II)
+
+datos <- data.frame(Etiquetas, Puntuaciones)
+
+datos %>% ggplot(aes(Puntuaciones, fill = Etiquetas)) + scale_x_continuous(limit=c(-0.5,6.5),breaks = seq(0,6, by = 1)) +
+ geom_histogram(aes(bins=7), color = "black") + 
+ xlab("Puntuaciones")+ylab("Número de empleados")+ labs(title ="Competencias", subtitle= 
+ "Número de empleados por intervalo de puntuaciones") +
+ scale_fill_discrete(name = "Competencias") + theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0),
+ plot.subtitle = element_text( color = "dodgerblue4", size=20, hjust=0))
+
+#Conocimientos
+
+Etiquetas <- c(rep("Lenguajes de programación",55), rep("Herramientas de desarrollo (id)",55))
+Puntuaciones <- c(programadores$CN1, programadores$CN2)
+
+datos <- data.frame(Etiquetas, Puntuaciones)
+
+datos %>% ggplot(aes(Puntuaciones, fill = Etiquetas)) + scale_x_continuous(limit=c(-0.5,4.5),breaks = seq(0,4, by = 1)) +
+ geom_histogram(aes(bins=5), color = "black") + 
+ xlab("Puntuaciones")+ylab("Número de empleados")+ labs(title ="Conocimientos", subtitle= 
+ "Número de empleados por intervalo de puntuaciones") +
+ scale_fill_discrete(name = "Conocimientos") + theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0),
+ plot.subtitle = element_text( color = "dodgerblue4", size=20, hjust=0))
+
+
+#Funciones
+
+Etiquetas <- c(rep("Programación de aplicaciones",55), rep("Manejar bases de datos",55), rep("Asesorar a los usuarios",55),
+ rep("Documentar los módulos",55), rep("Aplicar las normas",55))
+Puntuaciones <- c(programadores$F1, programadores$F2, programadores$F3, programadores$F4, programadores$F5)
+
+datos <- data.frame(Etiquetas, Puntuaciones)
+
+datos %>% ggplot(aes(Puntuaciones, fill = Etiquetas)) + scale_x_continuous(limit=c(-0.5,4.5),breaks = seq(0,4, by = 1)) +
+ geom_histogram(aes(bins=5), color = "black") + 
+ xlab("Puntuaciones")+ylab("Número de empleados")+ labs(title ="Funciones", subtitle= 
+ "Número de empleados por intervalo de puntuaciones") +
+ scale_fill_discrete(name = "Funciones") + theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0),
  plot.subtitle = element_text( color = "dodgerblue4", size=20, hjust=0))
 
 
