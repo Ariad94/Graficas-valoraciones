@@ -26,8 +26,36 @@ programadores %>% ggplot(aes(Nombre.Empleado,diferencia, label = diferencia)) +
 ### ### Diagrama de barras por empleado de la diferencia entre su puntuación final y el nivel requerido modificado
 # Adecuacion del empleado al perfil
 
+Requerido <- 74.625
+Requerido_prueba <- 83.75
 
+diferencia_gris <- programadores$FINAL - Requerido
 
+diferencia_prueba <- programadores$FINAL - Requerido_prueba
+
+diferencia_azul <- ifelse(diferencia_prueba >= 0, diferencia_prueba, 0)
+
+diferencia_roja <- ifelse(diferencia_prueba < 0, diferencia_prueba, 0)
+
+datos <- data.frame(Nombre.Empleado = programadores$Nombre.Empleado, diferencia_gris, diferencia_prueba, diferencia_azul, diferencia_roja)
+
+datos <- datos[order(datos$diferencia_prueba),]
+
+datos$Nombre.Empleado <- factor(datos$Nombre.Empleado, levels = datos$Nombre.Empleado) 
+
+datos %>% ggplot() + 
+ geom_bar(aes(Nombre.Empleado, diferencia_roja, fill = "Por debajo del nivel requerido modificado"), stat = "identity", , width =.5) + 
+ geom_bar(aes(Nombre.Empleado, diferencia_azul, fill = "Por encima del nivel requerido modificado"), stat = "identity", , width =.5) + 
+ geom_bar(aes(Nombre.Empleado, diferencia_gris, fill = "Nivel requerido real"), alpha = 0.5, stat = "identity", , width =.5) +
+ scale_fill_manual("", values = c("grey","lightcoral","turquoise3")) +
+ coord_flip() + 
+ labs(title ="Adecuación al perfil por empleado si se modifica el nivel requerido", x = "Empleados", 
+ y = "Diferencia de las puntuaciones finales respecto al nivel requerido modificado") +
+ theme_minimal() + 
+ theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0),
+ axis.title.x = element_text(color = "dodgerblue4", size=13, face = "bold"),
+ axis.title.y = element_text(color = "dodgerblue4", size=13, face = "bold"),
+ legend.text = element_text(size=13), axis.text = element_text(size=10))
 
 
 
