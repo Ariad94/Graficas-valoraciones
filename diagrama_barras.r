@@ -46,7 +46,7 @@ datos$Nombre.Empleado <- factor(datos$Nombre.Empleado, levels = datos$Nombre.Emp
 datos %>% ggplot() + 
  geom_bar(aes(Nombre.Empleado, diferencia_roja, fill = "Por debajo del nivel requerido modificado"), stat = "identity", , width =.5) + 
  geom_bar(aes(Nombre.Empleado, diferencia_azul, fill = "Por encima del nivel requerido modificado"), stat = "identity", , width =.5) + 
- geom_bar(aes(Nombre.Empleado, diferencia_gris, fill = "Nivel requerido real"), alpha = 0.5, stat = "identity", , width =.5) +
+ geom_bar(aes(Nombre.Empleado, diferencia_gris, fill = "Diferencia con el nivel requerido real"), alpha = 0.5, stat = "identity", , width =.5) +
  scale_fill_manual("", values = c("grey","lightcoral","turquoise3")) +
  coord_flip() + 
  labs(title ="Adecuación al perfil por empleado si se modifica el nivel requerido", x = "Empleados", 
