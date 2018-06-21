@@ -5,6 +5,7 @@ library(dplyr)
 library(ggthemes)
 library(treemapify)
 library(ggcorrplot)
+library(corrplot)
 
 ### ### Diagrama de arbol de competencias, conocimiento y funciones
 
@@ -22,9 +23,10 @@ datos <- data.frame(Grupos, Nombres, Medias)
 
 datos %>% ggplot(aes(area= Medias, fill = Medias, label = Nombres, subgroup = Grupos)) + geom_treemap() +
  geom_treemap_text(colour = "white", place = "centre", grow = FALSE) +
- facet_grid(Grupos~.) + labs(title="Puntuaciones medias de las competencias, conocimientos y funciones") +
+ facet_grid(Grupos~.) + labs(title="Puntuaciones medias de las competencias, conocimientos y funciones", fill = "Medias\n") +
  theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0, face="bold"),
- strip.text.y = element_text(color = "dodgerblue4", size=15))
+ strip.text.y = element_text(color = "dodgerblue4", size=13, face = "bold"), legend.title = element_text(color = "dodgerblue4", size=13, face = "bold"),
+ legend.text = element_text(size=13))
 
 
 ### ### Diagrama de arbol de competencias, conocimiento y funciones según ponderaciones teoricas
@@ -40,9 +42,10 @@ datos <- data.frame(Grupos, Nombres, Ponderaciones)
 
 datos %>% ggplot(aes(area= Ponderaciones, fill = Ponderaciones, label = Nombres, subgroup = Grupos)) + geom_treemap() +
  geom_treemap_text(colour = "white", place = "centre", grow = FALSE) +
- facet_grid(Grupos~.) + labs(title="Importancia de las competencias, conocimientos y funciones en el perfil") +
- theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=15, hjust=0, face="bold"),
- strip.text.y = element_text(color = "dodgerblue4", size=15))
+ facet_grid(Grupos~.) + labs(title="Importancia de las competencias, conocimientos y funciones en el perfil", fill = "Ponderaciones \n") +
+ theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0, face="bold"),
+ strip.text.y = element_text(color = "dodgerblue4", size=13, face = "bold"), legend.title = element_text(color = "dodgerblue4", size=13, face = "bold"),
+ legend.text = element_text(size=13))
 
 
 ### ### Gráfica de correlaciones 
@@ -59,11 +62,14 @@ colnames(datos) <- c("COMPETENCIA \nCalidad y mejora continua","COMPETENCIA \nPe
 coeficientes <- round(cor(datos, method = "spearman"), 1)
 
 ggcorrplot(coeficientes, hc.order = TRUE, type = "lower", lab = TRUE, lab_size = 3, method="circle", 
- colors = c("palegreen3", "white", "dodgerblue4")) +
- labs(title="Correlaciones", subtitle = "Coeficientes de correlación de Spearman", x = "", y = "")+ 
+ colors = c("darkgreen", "white", "dodgerblue4"), legend.title = "Coeficientes \nde correlación\n") +
+ labs(title="Correlación entre competencias, conocimientos y funciones", subtitle = "Coeficientes de correlación de Spearman", x = "", y = "", legend = "Coeficientes \nde correlación\n")+ 
  theme_minimal() +
  theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0),
- plot.subtitle= element_text(color = "dodgerblue4", size=20), legend.position="none", axis.text.x = element_text(angle = 90, hjust = 1))
+ plot.subtitle = element_text( color = "dodgerblue4", size=20, hjust=0), 
+ axis.title.x = element_text(color = "dodgerblue4", size=13, face = "bold"), axis.text.x = element_text(angle = 90, hjust = 1),
+ axis.title.y = element_text(color = "dodgerblue4", size=13, face = "bold"), legend.title = element_text(color = "dodgerblue4", size=13, face = "bold"),
+ legend.text = element_text(size=13), axis.text = element_text(size=10))
 
 
 
