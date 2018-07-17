@@ -12,7 +12,7 @@ is_outlier <- function(x) {
   return(x < quantile(x, 0.25) - 1.5 * IQR(x) | x > quantile(x, 0.75) + 1.5 * IQR(x))
 }
 
-programadores %>% mutate(Etiquetas = rep("FINAL",55)) %>% mutate(outlier1=ifelse(is_outlier(FINAL),as.character(Nombre.Empleado), as.numeric(NA))) %>% 
+programadores %>% mutate(Etiquetas = rep("FINAL",16)) %>% mutate(outlier1=ifelse(is_outlier(FINAL),as.character(Nombre.Empleado), as.numeric(NA))) %>% 
  mutate(outlier2=ifelse(is_outlier(FINAL),FINAL, as.numeric(NA))) %>% 
  ggplot(aes(Etiquetas, FINAL)) + geom_boxplot(fill = "darkviolet", alpha = 0.8) + scale_y_continuous(limits = c(0,100), breaks = seq(0,100, by = 20)) + 
  geom_text(aes(label= outlier1),na.rm=TRUE, nudge_y = 2) + geom_text(aes(label= round(outlier2,2)),na.rm=TRUE, nudge_y = -2) +
@@ -39,7 +39,7 @@ F5 <- programadores$F5
 
 datos_valoradores <- data.frame(nombre = rep(valoradores,12), puntuaciones = c(C1,C2,C3,C4,C5,CN1,CN2,F1,F2,F3,F4,F5))
 
-datos_medias <- data.frame(Grupo = rep("Valoradores",23),(aggregate(datos_valoradores[, 2], list(datos_valoradores$nombre), mean)))
+datos_medias <- data.frame(Grupo = rep("Valoradores",12),(aggregate(datos_valoradores[, 2], list(datos_valoradores$nombre), mean)))
 colnames(datos_medias)[2] <- "Nombre.Valorador"
 colnames(datos_medias)[3] <- "medias"
 
@@ -60,7 +60,9 @@ datos_medias %>% mutate(outlier1=ifelse(is_outlier(medias), as.character(Nombre.
 ### ### Diagrama de cajas de una variable por factores + facet_grid
 # UT
 
-Etiquetas <- c(rep("Puntuaciones finales",55), rep("Competencias", 55), rep("Conocimientos",55), rep("Desempeño",55))
+n <- 55
+
+Etiquetas <- c(rep("Puntuaciones finales",n), rep("Competencias", n), rep("Conocimientos",n), rep("Desempeño",n))
 Puntuaciones<- c(programadores$FINAL, programadores$M1, programadores$M2, programadores$M3)
 Grupo <- rep(programadores$UT, 4)
 
@@ -78,7 +80,9 @@ datos %>% mutate(Grupo = reorder(Grupo, Puntuaciones, FUN = median))%>%
 ### ### Diagrama de cajas de una variable por factores + facet_grid
 # UN
 
-Etiquetas <- c(rep("Puntuaciones finales",55), rep("Competencias", 55), rep("Conocimientos",55), rep("Desempeño",55))
+n <- 55
+
+Etiquetas <- c(rep("Puntuaciones finales",n), rep("Competencias", n), rep("Conocimientos",n), rep("Desempeño",n))
 Puntuaciones<- c(programadores$FINAL, programadores$M1, programadores$M2, programadores$M3)
 Grupo <- rep(programadores$UN, 4)
 
@@ -97,6 +101,8 @@ datos %>% mutate(Grupo = reorder(Grupo, Puntuaciones, FUN = median))%>%
 
 ### ### Diagrama de cajas de una variable por factores y por colores
 # Para empleado-valorador, valorador-aprobador
+
+n <- 55
 
 C1 <- programadores$C1II*4/6
 C2 <- programadores$C2II*4/6
@@ -121,7 +127,7 @@ datos <- data.frame(Factor.Empleado, Valoradores, Puntuaciones, SiglasVal = rep(
 datos %>% mutate(Factor.Empleado = reorder(Factor.Empleado, Puntuaciones, FUN = median)) %>%
  ggplot( mapping = aes(Factor.Empleado, Puntuaciones, color = Valoradores)) + geom_boxplot() + 
  scale_y_continuous(limits = c(0,5.5), breaks = seq(0,4, by = 1)) +
- geom_text(aes(x = Factor.Empleado, y = rep(5,660), label = SiglasVal, color = Valoradores), angle = 90) +
+ geom_text(aes(x = Factor.Empleado, y = rep(5,n*12), label = SiglasVal, color = Valoradores), angle = 90) +
  xlab("")+ylab("")+labs(title = "Puntuaciones obtenidas por cada empleado", 
  subtitle = "Cuartiles, máximo, mínimo y rango intercuartílico")  +
  theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0), 
@@ -182,7 +188,7 @@ is_outlier <- function(x) {
 opuesto <-  function(x){return(-median(x))}
 
 datos %>% mutate(Etiquetas = reorder(Etiquetas, Puntuaciones, FUN = opuesto)) %>% group_by(Etiquetas) %>%
- mutate(outlier1=ifelse(is_outlier(Puntuaciones), as.character(Nombre.Empleado), as.numeric(NA))) %>% 
+ mutate(outlier1=ifelse(is_outlier(Puntuaciones), as.character(Nombre.Empleado), as.character(NA))) %>% 
  mutate(outlier2=ifelse(is_outlier(Puntuaciones),Puntuaciones, as.numeric(NA))) %>% 
  ggplot(aes(Etiquetas, Puntuaciones)) + scale_y_continuous(limits=c(0,100), breaks = seq(0,100, by = 10)) +
  geom_boxplot(fill = c("palegreen","sandybrown", "paleturquoise1")) +
@@ -243,8 +249,6 @@ datos %>% mutate(Etiquetas = reorder(Etiquetas, Puntuaciones, FUN = median)) %>%
  plot.subtitle = element_text( color = "dodgerblue4", size=20, hjust=0), legend.position = "none", axis.text = element_text(size=13),
  axis.text.x = element_text(angle = 90, hjust = 1)) 
 
-
-
 # Funciones
 
 is_outlier <- function(x) {
@@ -253,6 +257,8 @@ is_outlier <- function(x) {
 
 Etiquetas <- c(rep("Programar aplicaciones",55), rep("Manejar bases de datos",55), rep("Asesorar a los usuarios",55), rep("Documentar los módulos",55),
  rep("Aplicar las normas",55))
+# Etiquetas <- c(rep("Aplicaciones informáticas",16), rep("Pruebas del código",16), rep("Documentar actividad",16), rep("Elaborar manual técnico",16),
+ rep("Interpretar aplicaciones",16))
 Puntuaciones <- c(programadores$F1, programadores$F2, programadores$F3, programadores$F4, programadores$F5)
 
 datos <- data.frame(Etiquetas, Puntuaciones, Nombre.Empleado = rep(programadores$Nombre.Empleado, 5))
@@ -269,10 +275,6 @@ datos %>% mutate(Etiquetas = reorder(Etiquetas, Puntuaciones, FUN = median)) %>%
  theme_minimal() + theme(plot.title = element_text( color = "dodgerblue4", size=25, hjust=0), 
  plot.subtitle = element_text( color = "dodgerblue4", size=20, hjust=0), legend.position = "none", axis.text = element_text(size=13),
  axis.text.x = element_text(angle = 90, hjust = 1)) 
-
-
-
-
 
 
 
